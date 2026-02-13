@@ -1,0 +1,159 @@
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+<style>
+body {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background-color:#ffe6f0;
+  font-family: 'Dancing Script', cursive;
+  overflow:hidden;
+  margin:0;
+}
+
+.envelope-container {
+  position: relative;
+  width:90%;
+  max-width:400px;
+  height:250px;
+}
+
+.envelope {
+  width:100%;
+  height:100%;
+  background:#ffb6c1;
+  border:3px solid #ff69b4;
+  border-radius:10px;
+  position:relative;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  overflow:hidden;
+}
+
+.envelope::before {
+  content:"";
+  position:absolute;
+  top:-100px;
+  left:0;
+  width:0;
+  height:0;
+  border-left:50% solid transparent;
+  border-right:50% solid transparent;
+  border-bottom:100px solid #ffb6c1;
+}
+
+.heart {
+  position:absolute;
+  top:50px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:50px;
+  color:#ff1a75;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1);}
+  50% { transform: translateX(-50%) scale(1.2);}
+  100% { transform: translateX(-50%) scale(1);}
+}
+
+.paper {
+  width:90%;
+  height:60%;
+  background:#fff8dc;
+  border:2px solid #ff69b4;
+  border-radius:8px;
+  position:absolute;
+  top:100%;
+  left:5%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-size:24px;
+  font-weight:bold;
+  color:#ff1493;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  transition: top 1s ease-out;
+}
+
+.buttons {
+  margin-top:15px;
+  position:relative;
+  width:100%;
+  height:60px;
+}
+
+button {
+  padding:10px 20px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+#yes {
+  background-color:#ff69b4;
+  color:white;
+}
+
+#no {
+  background-color:#ccc;
+  position:absolute;
+}
+</style>
+</head>
+<body>
+<div class="envelope-container">
+  <div class="envelope"></div>
+  <div class="heart">❤️</div>
+  <div class="paper" id="paper">
+    Aiman, will you be my Valentine?
+    <div class="buttons">
+      <button id="yes" onclick="alert('Yay! 💖 I knew it!')">Yes 💖</button>
+      <button id="no">No 😢</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.onload = () => {
+  const paper = document.getElementById('paper');
+  setTimeout(() => {
+    paper.style.top = '40px';
+  }, 1000);
+};
+
+const noBtn = document.getElementById('no');
+noBtn.addEventListener('mouseover', () => {
+  const parent = document.querySelector('.buttons');
+  const maxX = parent.offsetWidth - noBtn.offsetWidth;
+  const maxY = parent.offsetHeight - noBtn.offsetHeight;
+  const x = Math.floor(Math.random() * maxX);
+  const y = Math.floor(Math.random() * maxY);
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
+});
+</script>
+</body>
+</html>
+"""
+
+@app.route("/")
+def home():
+    return render_template_string(html)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
